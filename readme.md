@@ -210,7 +210,7 @@ Would you like me to add any additional operators or keywords, or expand on any 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/love-language.git
+git clone https://github.com/starc007/love-language.git
 ```
 
 2. Build the project:
@@ -223,22 +223,6 @@ cargo build --release
 
 ```bash
 cargo run
-```
-
-## 💻 REPL Commands
-
-The Love Language REPL provides an interactive environment to try out the language:
-
-```bash
-$ cargo run
-Welcome to Love Language! 💕
-Type 'breakup;' to exit
-
-love> heart x match 10;
-love> whisper x;
-10
-love> breakup;
-Goodbye! 💔
 ```
 
 ## 🛠️ Building from Source
@@ -272,11 +256,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 💌 Contact
 
 For questions, suggestions, or love letters about the language, please open an issue on GitHub.
-
-## 🌟 Acknowledgments
-
-- Inspired by esoteric programming languages
-- Built with Rust for performance and safety
-- Special thanks to all contributors who spread the love!
 
 Remember: Code with love! ❤️
