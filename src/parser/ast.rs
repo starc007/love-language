@@ -47,10 +47,6 @@ pub enum Ast {
         operand: Box<Ast>,
     },
     
-    Call {
-        callee: String,
-        arguments: Vec<Ast>,
-    },
     
     Assign {
         name: String,

@@ -44,13 +44,7 @@ impl Parser {
             _ => return Err(LoveError::Parser("Expected variable name".to_string())),
         };
 
-        // Handle optional type annotation
-        let var_type = if matches!(self.peek(), Some(Token::Colon)) {
-            self.advance(); // consume :
-            Some(self.parse_type()?)
-        } else {
-            None
-        };
+
 
         self.consume(&Token::Match, "Expected 'match' after variable name")?;
         let initializer = self.expression()?;

@@ -10,7 +10,5 @@ pub enum LoveError {
     
     #[error("Runtime error: {0}")]
     Runtime(String),
-    
-    #[error("Type error: {0}")]
-    Type(String),
+
 }

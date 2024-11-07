@@ -52,7 +52,4 @@ impl<'a> Lexer<'a> {
         Ok(tokens)
     }
 
-    pub fn get_position(&self) -> (usize, usize) {
-        (self.line, self.column)
-    }
 }

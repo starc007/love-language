@@ -28,5 +28,4 @@ pub enum Type {
     Number,
     Text,
     Boolean,
-    Void,
 }

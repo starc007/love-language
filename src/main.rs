@@ -106,12 +106,4 @@ fn execute_line(
     }
 }
 
-// Helper function to format error messages
-fn format_error(error: &error::LoveError) -> String {
-    match error {
-        error::LoveError::Lexer(msg) => format!("Lexical Error: {}", msg),
-        error::LoveError::Parser(msg) => format!("Syntax Error: {}", msg),
-        error::LoveError::Runtime(msg) => format!("Runtime Error: {}", msg),
-        error::LoveError::Type(msg) => format!("Type Error: {}", msg),
-    }
-}
+
