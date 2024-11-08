@@ -6,8 +6,8 @@ pub enum Ast {
     
     VariableDecl {
         name: String,
-        is_constant: bool,
         initializer: Box<Ast>,
+        is_constant: bool,
     },
     
     FunctionDecl {
@@ -15,6 +15,11 @@ pub enum Ast {
         params: Vec<(String, Type)>,
         return_type: Option<Type>,
         body: Vec<Ast>,
+    },
+    
+    Call {
+        callee: String,
+        arguments: Vec<Ast>,
     },
     
     If {
@@ -46,7 +51,6 @@ pub enum Ast {
         operator: BinaryOp,
         operand: Box<Ast>,
     },
-    
     
     Assign {
         name: String,

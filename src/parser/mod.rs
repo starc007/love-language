@@ -120,7 +120,6 @@ impl Parser {
     fn expression(&mut self) -> Result<Ast, LoveError> {
         self.assignment()
     }
-
     fn assignment(&mut self) -> Result<Ast, LoveError> {
         let expr = self.or()?;
 
@@ -130,18 +129,17 @@ impl Parser {
 
             match expr {
                 Ast::Variable(name) => {
-                    return Ok(Ast::Assign {
+                    Ok(Ast::Assign {
                         name,
                         value: Box::new(value),
-                    });
+                    })
                 }
-                _ => return Err(LoveError::Parser("Invalid assignment target".to_string())),
+                _ => Err(LoveError::Parser("Invalid assignment target".to_string())),
             }
+        } else {
+            Ok(expr)
         }
-
-        Ok(expr)
     }
-
     fn or(&mut self) -> Result<Ast, LoveError> {
         let mut expr = self.and()?;
 
@@ -283,11 +281,18 @@ impl Parser {
                 self.consume(&Token::RParen, "Expected ')' after expression")?;
                 Ok(Ast::Grouping(Box::new(expr)))
             }
-            Some(Token::Identifier(name)) => Ok(Ast::Variable(name.clone())),
+            Some(Token::Identifier(name)) => {
+                let name = name.clone();
+                if self.check(&Token::LParen) {
+                    self.advance(); // consume '('
+                    self.call_expression(name)
+                } else {
+                    Ok(Ast::Variable(name))
+                }
+            }
             _ => Err(LoveError::Parser("Expected expression".to_string())),
         }
     }
-
     fn block(&mut self) -> Result<Vec<Ast>, LoveError> {
         self.consume(&Token::LBrace, "Expected '{' before block")?;
         let mut statements = Vec::new();
@@ -351,8 +356,9 @@ impl Parser {
         Ok(Ast::ReturnStmt(value))
     }
 
-    fn function_declaration(&mut self) -> Result<Ast, LoveError> {
+     fn function_declaration(&mut self) -> Result<Ast, LoveError> {
         self.advance(); // consume 'devotion'
+        
         let name = match self.advance() {
             Some(Token::Identifier(name)) => name.clone(),
             _ => return Err(LoveError::Parser("Expected function name".to_string())),
@@ -373,10 +379,13 @@ impl Parser {
                 let param_type = self.parse_type()?;
                 params.push((param_name, param_type));
 
-                if !matches!(self.peek(), Some(Token::Comma)) {
-                    break;
+                match self.peek() {
+                    Some(Token::Comma) => {
+                        self.advance(); // consume comma
+                    }
+                    Some(Token::RParen) => break,
+                    _ => return Err(LoveError::Parser("Expected ',' or ')' after parameter".to_string())),
                 }
-                self.advance(); // consume comma
             }
         }
         
@@ -400,4 +409,35 @@ impl Parser {
             body,
         })
     }
+
+    fn call_expression(&mut self, name: String) -> Result<Ast, LoveError> {
+        let mut arguments = Vec::new();
+        
+        // Parse arguments
+        if !matches!(self.peek(), Some(Token::RParen)) {
+            loop {
+                arguments.push(self.expression()?);
+                
+                if !matches!(self.peek(), Some(Token::Comma)) {
+                    break;
+                }
+                self.advance(); // consume comma
+            }
+        }
+        
+        self.consume(&Token::RParen, "Expected ')' after arguments")?;
+        
+        Ok(Ast::Call {
+            callee: name,
+            arguments,
+        })
+    }
+
+     fn check(&self, token_type: &Token) -> bool {
+        match self.peek() {
+            Some(t) => t == token_type,
+            None => false,
+        }
+    }
+
 }

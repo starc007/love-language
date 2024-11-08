@@ -1,48 +1,78 @@
-use std::io::{self, Write};
 use rustyline::Editor;
 use colored::*;
+use std::io::{self};
 
+mod shared_types;
 mod lexer;
 mod parser;
 mod interpreter;
 mod error;
-mod shared_types;
 
 use crate::shared_types::Value;
+use crate::error::LoveError;
+use crate::lexer::Lexer;
+use crate::parser::Parser;
 
 fn main() -> io::Result<()> {
     print_welcome_message();
-    
+
     let mut rl = Editor::<()>::new();
     let mut interpreter = interpreter::Interpreter::new();
+    let mut current_line = String::new();
+    let mut brace_count = 0;
 
     loop {
-        print!("💕 love> ");
-        io::stdout().flush()?;
-
-        let readline = rl.readline("");
-        match readline {
+        let prompt = if brace_count > 0 { "...  " } else { "love> " };
+        
+        match rl.readline(prompt) {
             Ok(line) => {
-                if line.trim().is_empty() {
-                    continue;
-                }
-
+                let trimmed_line = line.trim();
+                
                 // Check for exit command
-                if line.trim().eq_ignore_ascii_case("breakup;") {
+                if trimmed_line.eq_ignore_ascii_case("breakup;") {
                     println!("{}", "Goodbye! Our love story ends here... 💔".bright_red());
                     break;
                 }
 
-                // Add line to history
-                rl.add_history_entry(line.as_str());
+                // Update brace count
+                brace_count += count_braces(trimmed_line);
+                
+                // Append current line
+                current_line.push_str(&line);
+                current_line.push('\n');
 
-                // Execute the line
-                match execute_line(&line, &mut interpreter) {
-                    Ok(value) => match value {
-                        Value::Null => (), // Don't print anything for null values
-                        _ => println!("{} {:?}", "💝".bright_green(), value),
-                    },
-                    Err(e) => println!("{} {}", "💔".bright_red(), e.to_string().bright_red()),
+                // Only check for semicolon if we're not in a block and not in a function declaration
+                if brace_count == 0 && !trimmed_line.is_empty() && 
+                   !trimmed_line.ends_with(';') && !trimmed_line.ends_with('{') && 
+                   !trimmed_line.ends_with('}') && !current_line.contains("devotion") {
+                    println!("{} Syntax error: Missing semicolon at end of statement", "💔".bright_red());
+                    current_line.clear();
+                    continue;
+                }
+
+                // If we have balanced braces and the line ends with semicolon or closing brace, execute
+                if brace_count == 0 && (trimmed_line.ends_with(';') || trimmed_line.ends_with('}')) {
+                    // Validate syntax before execution
+                    match validate_syntax(&current_line) {
+                        Ok(_) => {
+                            rl.add_history_entry(current_line.as_str());
+                            
+                            match execute_line(&current_line, &mut interpreter) {
+                                Ok(value) => match value {
+                                    Value::Null => (),
+                                    _ => println!("{} {:?}", "💝".bright_green(), value),
+                                },
+                                Err(e) => println!("{} {}", "💔".bright_red(), format_error(&e).bright_red()),
+                            }
+                        }
+                        Err(e) => println!("{} {}", "💔".bright_red(), format_error(&e).bright_red()),
+                    }
+                    
+                    current_line.clear();
+                } else if brace_count < 0 {
+                    println!("{} Syntax error: Unmatched closing brace", "💔".bright_red());
+                    current_line.clear();
+                    brace_count = 0;
                 }
             }
             Err(err) => {
@@ -55,27 +85,52 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
+fn validate_syntax(input: &str) -> Result<(), LoveError> {
+    // First check lexical structure
+    let mut lexer = Lexer::new(input);
+    let tokens = lexer.tokenize()?;
+    
+    // Then check parsing
+    let mut parser = Parser::new(tokens);
+    parser.parse()?;
+    
+    Ok(())
+}
+
+fn count_braces(line: &str) -> i32 {
+    let mut count = 0;
+    for c in line.chars() {
+        match c {
+            '{' => count += 1,
+            '}' => count -= 1,
+            _ => (),
+        }
+    }
+    count
+}
+
 fn print_welcome_message() {
     println!("{}", r#"
-    ╭──────────────────────────────────╮
-    │     Welcome to Love Language     │
-    │      Let's write with love!      │
-    ╰──────────────────────────────────╯
-    "#.bright_magenta());
+╭──────────────────────────────────╮
+│     Welcome to Love Language     │
+│      Let's write with love!      │
+╰──────────────────────────────────╯
+"#.bright_magenta());
     
     println!("{}", "💕 Type your love expressions...\n".bright_cyan());
     println!("{}", "💘 Example commands:".bright_yellow());
-    println!("   heart x match 10;          // Declare variable");
-    println!("   forever y match 20;        // Declare constant");
-    println!("   whisper (x cuddle y);      // Print x + y");
-    println!("   x match y kiss 2;          // Multiply\n");
-    println!("{}", "💔 Type 'breakup;' to exit\n".bright_red());
+    println!("   heart x match 10;");
+    println!("   whisper x;");
+    println!("   devotion add(x: number, y: number) -> number {{");
+    println!("       promise x cuddle y;");
+    println!("   }}");
+    println!("{}", "\n💔 Type 'breakup;' to exit\n".bright_red());
 }
 
 fn execute_line(
     line: &str, 
     interpreter: &mut interpreter::Interpreter
-) -> Result<Value, error::LoveError> {
+) -> Result<Value, LoveError> {
     // Skip empty lines
     if line.trim().is_empty() {
         return Ok(Value::Null);
@@ -83,27 +138,21 @@ fn execute_line(
 
     // Lexical analysis
     let mut lexer = lexer::Lexer::new(line);
-    let tokens = match lexer.tokenize() {
-        Ok(tokens) => tokens,
-        Err(e) => {
-            return Err(error::LoveError::Lexer(format!("Lexer error: {}", e)));
-        }
-    };
+    let tokens = lexer.tokenize()?;
 
     // Parsing
     let mut parser = parser::Parser::new(tokens);
-    let ast = match parser.parse() {
-        Ok(ast) => ast,
-        Err(e) => {
-            return Err(error::LoveError::Parser(format!("Parser error: {}", e)));
-        }
-    };
+    let ast = parser.parse()?;
 
     // Interpretation
-    match interpreter.interpret(ast) {
-        Ok(value) => Ok(value),
-        Err(e) => Err(error::LoveError::Runtime(format!("Runtime error: {}", e))),
-    }
+    interpreter.interpret(ast)
 }
 
-
+fn format_error(error: &LoveError) -> String {
+    match error {
+        LoveError::Lexer(msg) => format!("Lexer error: {}", msg),
+        LoveError::Parser(msg) => format!("Parser error: {}", msg),
+        LoveError::Runtime(msg) => format!("Runtime error: {}", msg),
+        LoveError::Type(msg) => format!("Type error: {}", msg),
+    }
+}
