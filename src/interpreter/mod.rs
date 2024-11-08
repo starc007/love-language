@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::shared_types::{Value, BinaryOp};
+use crate::shared_types::{BinaryOp, Type, Value};
 use crate::parser::ast::Ast;
 use crate::error::LoveError;
 
@@ -41,6 +41,31 @@ impl Interpreter {
         Interpreter {
             environment: Environment::new(),
         }
+    }
+
+      fn check_type(&self, value: &Value, expected: Type) -> Result<(), LoveError> {
+        let actual = value.get_type();
+        if actual != expected {
+            Err(LoveError::Type(format!(
+                "Expected {}, but found {}",
+                expected,
+                value
+            )))
+        } else {
+            Ok(())
+        }
+    }
+
+    fn check_binary_operands(
+        &self,
+        left: &Value,
+        right: &Value,
+        _operator: &BinaryOp,
+        expected_type: Type
+    ) -> Result<(), LoveError> {
+        self.check_type(left, expected_type.clone())?;
+        self.check_type(right, expected_type.clone())?;
+        Ok(())
     }
 
     pub fn interpret(&mut self, ast: Ast) -> Result<Value, LoveError> {
@@ -148,22 +173,45 @@ impl Interpreter {
                 let left_val = self.interpret(*left)?;
                 let right_val = self.interpret(*right)?;
                 
-                match (left_val, operator, right_val) {
-                    (Value::Number(a), BinaryOp::Add, Value::Number(b)) => Ok(Value::Number(a + b)),
-                    (Value::Number(a), BinaryOp::Subtract, Value::Number(b)) => Ok(Value::Number(a - b)),
-                    (Value::Number(a), BinaryOp::Multiply, Value::Number(b)) => Ok(Value::Number(a * b)),
-                    (Value::Number(a), BinaryOp::Divide, Value::Number(b)) => {
-                        if b == 0.0 {
-                            Err(LoveError::Runtime("Cannot split by zero!".to_string()))
-                        } else {
-                            Ok(Value::Number(a / b))
+                 match operator {
+                    BinaryOp::Add | BinaryOp::Subtract | 
+                    BinaryOp::Multiply | BinaryOp::Divide => {
+                        self.check_binary_operands(&left_val, &right_val, &operator, Type::Number)?;
+                        
+                        match (left_val, operator, right_val) {
+                            (Value::Number(a), BinaryOp::Add, Value::Number(b)) => 
+                                Ok(Value::Number(a + b)),
+                            (Value::Number(a), BinaryOp::Subtract, Value::Number(b)) => 
+                                Ok(Value::Number(a - b)),
+                            (Value::Number(a), BinaryOp::Multiply, Value::Number(b)) => 
+                                Ok(Value::Number(a * b)),
+                            (Value::Number(a), BinaryOp::Divide, Value::Number(b)) => {
+                                if b == 0.0 {
+                                    Err(LoveError::Runtime("Cannot split by zero!".to_string()))
+                                } else {
+                                    Ok(Value::Number(a / b))
+                                }
+                            }
+                            _ => Err(LoveError::Runtime("Invalid operation".to_string())),
                         }
-                    }
-                    (Value::Text(a), BinaryOp::Add, Value::Text(b)) => Ok(Value::Text(a + &b)),
-                    (Value::Number(a), BinaryOp::Less, Value::Number(b)) => Ok(Value::Boolean(a < b)),
-                    (Value::Number(a), BinaryOp::Greater, Value::Number(b)) => Ok(Value::Boolean(a > b)),
-                    (Value::Number(a), BinaryOp::Equal, Value::Number(b)) => Ok(Value::Boolean(a == b)),
-                    _ => Err(LoveError::Runtime("Invalid operation".to_string())),
+                    },
+                    BinaryOp::Greater | BinaryOp::Less | 
+                    BinaryOp::GreaterEqual | BinaryOp::LessEqual => {
+                        self.check_binary_operands(&left_val, &right_val, &operator, Type::Number)?;
+                        
+                        match (left_val, operator, right_val) {
+                            (Value::Number(a), BinaryOp::Greater, Value::Number(b)) => 
+                                Ok(Value::Boolean(a > b)),
+                            (Value::Number(a), BinaryOp::Less, Value::Number(b)) => 
+                                Ok(Value::Boolean(a < b)),
+                            (Value::Number(a), BinaryOp::GreaterEqual, Value::Number(b)) => 
+                                Ok(Value::Boolean(a >= b)),
+                            (Value::Number(a), BinaryOp::LessEqual, Value::Number(b)) => 
+                                Ok(Value::Boolean(a <= b)),
+                            _ => Err(LoveError::Runtime("Invalid comparison".to_string())),
+                        }
+                    },
+                    _ => Err(LoveError::Runtime("Operation not implemented".to_string())),
                 }
             }
             Ast::PrintStmt(expr) => {
