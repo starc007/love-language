@@ -2,256 +2,152 @@
 
 Love Language is a fun, love-themed programming language that brings romance to coding! Express your algorithms with affection using love-themed keywords and operators.
 
-## 💕 Overview
-
-Love Language is an interpreted programming language that replaces traditional programming keywords and operators with love-themed alternatives. It's designed to be fun, easy to understand, and perfect for sharing on social media!
-
 ## 🌟 Features
 
 - Love-themed keywords and operators
-- Static typing with type inference
 - Variables and constants
 - Functions with parameters and return values
-- Control flow statements
+- Control flow statements (if-else, while)
 - Basic arithmetic operations
 - String operations
 - Boolean logic
 
-## 💖 Syntax Guide
+## 💖 Quick Start
 
-# Love Language Operators and Keywords Reference 💝
+### Installation
 
-## 🎯 Operators
-
-### Arithmetic Operators
-
-| Love Operator | Traditional Operator | Example       | Description    |
-| ------------- | -------------------- | ------------- | -------------- |
-| `cuddle`      | `+`                  | `x cuddle y`  | Addition       |
-| `breakup`     | `-`                  | `x breakup y` | Subtraction    |
-| `kiss`        | `*`                  | `x kiss y`    | Multiplication |
-| `split`       | `/`                  | `x split y`   | Division       |
-
-### Assignment Operators
-
-| Love Operator | Traditional Operator | Example      | Description |
-| ------------- | -------------------- | ------------ | ----------- |
-| `match`       | `=`                  | `x match 10` | Assignment  |
-
-### Comparison Operators
-
-| Love Operator | Traditional Operator | Example          | Description           |
-| ------------- | -------------------- | ---------------- | --------------------- |
-| `soulmate`    | `==`                 | `x soulmate y`   | Equal to              |
-| `heartbreak`  | `!=`                 | `x heartbreak y` | Not equal to          |
-| `envies`      | `<`                  | `x envies y`     | Less than             |
-| `admires`     | `>`                  | `x admires y`    | Greater than          |
-| `yearns`      | `<=`                 | `x yearns y`     | Less than or equal    |
-| `adores`      | `>=`                 | `x adores y`     | Greater than or equal |
-
-### Logical Operators
-
-| Love Operator | Traditional Operator | Example   | Description |
-| ------------- | -------------------- | --------- | ----------- |
-| `and`         | `&&`                 | `x and y` | Logical AND |
-| `or`          | `\|\|`               | `x or y`  | Logical OR  |
-| `not`         | `!`                  | `not x`   | Logical NOT |
-
-## 🎨 Keywords
-
-### Variable Declaration
-
-| Love Keyword | Description        | Example                  |
-| ------------ | ------------------ | ------------------------ |
-| `heart`      | Declare a variable | `heart x match 10;`      |
-| `forever`    | Declare a constant | `forever PI match 3.14;` |
-
-### Control Flow
-
-| Love Keyword  | Traditional Keyword | Example                      | Description      |
-| ------------- | ------------------- | ---------------------------- | ---------------- |
-| `crush`       | `if`                | `crush (x admires 0) {...}`  | If statement     |
-| `butterflies` | `else`              | `} butterflies {...}`        | Else statement   |
-| `dating`      | `while`             | `dating (x envies 10) {...}` | While loop       |
-| `promise`     | `return`            | `promise x cuddle y;`        | Return statement |
-
-### Functions
-
-| Love Keyword | Traditional Keyword | Example                         | Description          |
-| ------------ | ------------------- | ------------------------------- | -------------------- |
-| `devotion`   | `function`          | `devotion add(x: number) {...}` | Function declaration |
-
-### Input/Output
-
-| Love Keyword | Traditional Keyword | Example             | Description      |
-| ------------ | ------------------- | ------------------- | ---------------- |
-| `whisper`    | `print`             | `whisper "Hello!";` | Print to console |
-
-### Data Types
-
-| Love Type | Traditional Type | Example                | Description             |
-| --------- | ---------------- | ---------------------- | ----------------------- |
-| `number`  | `number/float`   | `heart x: number`      | Numeric values          |
-| `text`    | `string`         | `heart msg: text`      | String values           |
-| `feeling` | `boolean`        | `heart happy: feeling` | Boolean values (yes/no) |
-
-### Boolean Values
-
-| Love Value | Traditional Value | Example                    |
-| ---------- | ----------------- | -------------------------- |
-| `yes`      | `true`            | `heart isLove match yes;`  |
-| `no`       | `false`           | `heart isSingle match no;` |
-
-### Special Values
-
-| Love Value | Traditional Value | Description         |
-| ---------- | ----------------- | ------------------- |
-| `lonely`   | `null`            | Represents no value |
-
-## 📝 Code Examples
-
-### Variable Declaration and Operations
-
-```love
-// Variable declarations
-heart age match 25;
-heart name match "Romeo";
-forever PI match 3.14;
-
-// Arithmetic
-heart sum match x cuddle y;
-heart product match x kiss y;
-heart difference match x breakup y;
-heart quotient match x split y;
-
-// Comparison
-crush (age admires 18) {
-    whisper "Adult";
-} butterflies {
-    whisper "Minor";
-}
-```
-
-### Function Definition
-
-```love
-devotion calculateLove(x: number, y: number) -> number {
-    crush (x heartbreak y) {
-        promise 0;
-    }
-
-    heart loveScore match (x kiss y) split 2;
-    promise loveScore;
-}
-```
-
-### Loop Example
-
-```love
-heart count match 0;
-dating (count envies 5) {
-    whisper "I love coding!";
-    count match count cuddle 1;
-}
-```
-
-### Complete Program Example
-
-```love
-// Calculate love compatibility
-devotion loveCalculator(name1: text, name2: text) -> number {
-    heart score match 0;
-
-    // Some complex love calculation
-    crush (name1 soulmate name2) {
-        promise 100;
-    }
-
-    score match (name1.length cuddle name2.length) kiss 5;
-
-    crush (score admires 100) {
-        promise 100;
-    }
-
-    promise score;
-}
-
-// Usage
-heart romeo match "Romeo";
-heart juliet match "Juliet";
-heart compatibility match loveCalculator(romeo, juliet);
-whisper compatibility;
-```
-
-## 🚫 Reserved Keywords
-
-All the love-themed keywords listed above are reserved and cannot be used as identifiers in your programs.
-
-## 📌 Style Guide
-
-1. End all statements with a semicolon (`;`)
-2. Use spaces around operators (`x cuddle y` not `x cuddle y`)
-3. Use indentation of 4 spaces inside blocks
-4. Add spaces after commas in function arguments
-5. Use meaningful variable names that complement the love theme
-
-## ⚠️ Common Gotchas
-
-1. Remember to use `match` for assignment, not traditional `=`
-2. Boolean values are `yes` and `no`, not `true` and `false`
-3. Use `soulmate` for equality comparison, not `match`
-4. Function parameters require type annotations
-5. All statements must end with a semicolon
-
-Would you like me to add any additional operators or keywords, or expand on any particular aspect of the language syntax?
-
-## 🚀 Getting Started
-
-1. Clone the repository:
+1. Make sure you have Rust installed on your system
+2. Clone the repository:
 
 ```bash
 git clone https://github.com/starc007/love-language.git
+cd love-language
 ```
 
-2. Build the project:
+3. Build the project:
 
 ```bash
 cargo build --release
 ```
 
-3. Run the REPL:
+### Running Love Language Programs
+
+You can run Love Language in two modes:
+
+1. Interactive REPL:
 
 ```bash
 cargo run
 ```
 
-## 🛠️ Building from Source
+2. Run a .love file:
 
-Requirements:
+```bash
+cargo run -- path/to/your/script.love
+```
 
-- Rust 1.54 or higher
-- Cargo package manager
+## 💕 Language Guide
 
-Build steps:
+### Basic Syntax
 
-1. Install Rust and Cargo
-2. Clone the repository
-3. Run `cargo build --release`
-4. The binary will be available in `target/release/`
+```love
+// Variables
+heart x match 10;              // Variable declaration
+forever LOVE match 100;        // Constant declaration
+
+// Output
+whisper "Hello Love!";         // Print to console
+whisper x;                     // Print variable value
+
+// Arithmetic
+heart sum match x cuddle y;    // Addition
+heart diff match x breakup y;  // Subtraction
+heart prod match x kiss y;     // Multiplication
+heart quot match x split y;    // Division
+
+// Functions
+devotion add(x: number, y: number) -> number {
+    promise x cuddle y;
+}
+
+// Control Flow
+crush (x admires y) {          // If statement
+    whisper "x is greater!";
+} butterflies {                // Else statement
+    whisper "y is greater!";
+}
+
+// Loops
+dating (count envies 5) {      // While loop
+    whisper count;
+    count match count cuddle 1;
+}
+```
+
+### 💝 Operators
+
+| Love Operator | Traditional | Description    |
+| ------------- | ----------- | -------------- |
+| `cuddle`      | `+`         | Addition       |
+| `breakup`     | `-`         | Subtraction    |
+| `kiss`        | `*`         | Multiplication |
+| `split`       | `/`         | Division       |
+| `admires`     | `>`         | Greater than   |
+| `envies`      | `<`         | Less than      |
+| `soulmate`    | `==`        | Equal to       |
+| `heartbreak`  | `!=`        | Not equal to   |
+
+### 🎯 Keywords
+
+| Love Keyword  | Traditional | Description          |
+| ------------- | ----------- | -------------------- |
+| `heart`       | `let`       | Variable declaration |
+| `forever`     | `const`     | Constant declaration |
+| `devotion`    | `function`  | Function declaration |
+| `whisper`     | `print`     | Output statement     |
+| `crush`       | `if`        | If statement         |
+| `butterflies` | `else`      | Else statement       |
+| `dating`      | `while`     | While loop           |
+| `promise`     | `return`    | Return statement     |
+
+## 📝 Example Programs
+
+### Simple Calculator
+
+```love
+devotion add(x: number, y: number) -> number {
+    promise x cuddle y;
+}
+
+heart a match 10;
+heart b match 5;
+heart result match add(a, b);
+whisper "The sum is:";
+whisper result;
+```
+
+### Love Counter
+
+```love
+heart count match 0;
+whisper "Counting with love:";
+
+dating (count envies 5) {
+    whisper "Love count:";
+    whisper count;
+    count match count cuddle 1;
+}
+```
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to submit pull requests for:
+Contributions are welcome! Feel free to:
 
-- New love-themed keywords
-- Additional language features
-- Bug fixes
-- Documentation improvements
-- Examples and tutorials
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+- Report bugs
+- Suggest new features
+- Add new love-themed operators
+- Improve documentation
+- Create example programs
 
 ## 💌 Contact
 
