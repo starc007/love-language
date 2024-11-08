@@ -1,0 +1,37 @@
+// A sweet love story calculator 💝
+
+// Define our love calculator function
+devotion calculateLove(name1: text, name2: text) -> number {
+    heart length1 match 5;  // Placeholder since we don't have string length yet
+    heart length2 match 7;
+    
+    // Calculate love percentage based on names
+    heart loveScore match (length1 cuddle length2) kiss 5;
+    
+    // Ensure score is not too high
+    crush (loveScore admires 100) {
+        promise 100;
+    }
+    
+    promise loveScore;
+}
+
+// Let's write our love story
+heart romeo match "Romeo";
+heart juliet match "Juliet";
+
+// Print a lovely header
+whisper "💖 Love Calculator 💖";
+whisper "----------------";
+
+// Calculate and show their love score
+whisper "Love score for Romeo and Juliet:";
+heart score match calculateLove(romeo, juliet);
+whisper score;
+
+// Add some fun facts
+crush (score admires 80) {
+    whisper "True love indeed! 💑";
+} butterflies {
+    whisper "Love can grow! 🌱";
+}

@@ -114,6 +114,36 @@ impl Interpreter {
                 self.environment.define(name, value.clone());
                 Ok(value)
             }
+              Ast::If { condition, then_branch, else_branch } => {
+                // Evaluate the condition
+                let cond_value = self.interpret(*condition)?;
+                
+                match cond_value {
+                    Value::Boolean(true) => {
+                        // Execute then branch
+                        let mut last_value = Value::Null;
+                        for stmt in then_branch {
+                            last_value = self.interpret(stmt)?;
+                        }
+                        Ok(last_value)
+                    },
+                    Value::Boolean(false) => {
+                        // Execute else branch if it exists
+                        if let Some(else_stmts) = else_branch {
+                            let mut last_value = Value::Null;
+                            for stmt in else_stmts {
+                                last_value = self.interpret(stmt)?;
+                            }
+                            Ok(last_value)
+                        } else {
+                            Ok(Value::Null)
+                        }
+                    },
+                    _ => Err(LoveError::Runtime(
+                        "Condition must evaluate to a feeling (yes/no)".to_string()
+                    )),
+                }
+            },
             Ast::Binary { left, operator, right } => {
                 let left_val = self.interpret(*left)?;
                 let right_val = self.interpret(*right)?;

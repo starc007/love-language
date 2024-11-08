@@ -1,0 +1,17 @@
+
+// Variables
+heart x match 10;
+whisper "Value of x:";
+whisper x;
+
+// Simple arithmetic
+heart y match x cuddle 5;
+whisper "x cuddle 5 equals:";
+whisper y;
+
+// Simple comparison
+crush (y admires 10) {
+    whisper "y is greater than 10!";
+} butterflies {
+    whisper "y is not greater than 10!";
+}
